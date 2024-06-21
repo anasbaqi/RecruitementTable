@@ -1,0 +1,73 @@
+/* App.css */
+
+
+/* Centered heading */
+.centered {
+    text-align: center;
+  }
+  
+  /* Card styling */
+  .card {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Form styling */
+  .card-body {
+    padding: 1.25rem;
+  }
+  
+  .form-label {
+    font-weight: bold;
+  }
+  
+  .form-control {
+    margin-bottom: 1rem;
+  }
+  
+  /* Button styling */
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+  
+  /* Container and spacing */
+  .container {
+    max-width: 900px;
+    margin-top: 2rem;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      max-width: 100%;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+  
