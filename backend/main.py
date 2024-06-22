@@ -67,6 +67,7 @@ async def delete_candidate(name):
         return f"Succesfully deleted candidate item {name}"
     raise HTTPException(404, f"there is no candidate item with given name {name}")
 
+
 # Predefined dictionary to map statuses to template files
 template_files = {
     "new candidate": "templates/new_candidate.txt",

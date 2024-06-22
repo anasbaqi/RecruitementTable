@@ -1,8 +1,9 @@
-import  { useState } from 'react';
+import  { useState, useEffect } from 'react';
 import CandidateForm from "./components/AddCandidate";
 import CandidateTable from "./components/CandidateTable";
 import axios from 'axios';
 import './App.css';
+import EmailPopup from './components/EmailPopup';
 
 interface Candidate {
     id: number; // id will be assigned by the server
@@ -14,8 +15,21 @@ interface Candidate {
 
 function App() {
     const [candidates, setCandidates] = useState<Candidate[]>([]);
+    const [emailContent, setEmailContent] = useState<string | null>(null); // State for email content
 
+    // Fetch candidates when the component mounts
+    useEffect(() => {
+      const fetchCandidates = async () => {
+          try {
+              const response = await axios.get<Candidate[]>('http://localhost:8000/api/candidates');
+              setCandidates(response.data);
+          } catch (error) {
+              console.error('Error fetching candidates:', error);
+          }
+      };
 
+        fetchCandidates();
+    }, []);
     const addCandidate = async (newCandidate: Omit<Candidate, 'id'>) => { // Omit 'id' from Candidate
         try {
             await axios.post('http://localhost:8000/api/candidate/', newCandidate);
@@ -54,6 +68,18 @@ function App() {
     }
 };
 
+  const sendEmail = async (name: string) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/candidate/email/${name}`);
+      console.log(response.data)
+      setEmailContent(response.data)
+      //send the response to EmailPopup and then create a popup there
+    } catch (error){
+      console.error('Error sending email:', error)
+    }
+
+  };
+
     return (
         
       <div className="container mt-4">
@@ -63,8 +89,11 @@ function App() {
           <CandidateForm addCandidate={addCandidate} />
       </div>
       <hr />
-      <CandidateTable candidates={candidates} updateCandidateStatus={updateCandidateStatus} deleteCandidate={deleteCandidate} />
+      <CandidateTable candidates={candidates} updateCandidateStatus={updateCandidateStatus} deleteCandidate={deleteCandidate} sendEmail={sendEmail} />
+      {emailContent && <EmailPopup content={emailContent} onClose={() => setEmailContent(null)} />} {/* Conditionally render EmailPopup */}
+        
     </div>
+   
         
     );
 }
