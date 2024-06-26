@@ -11,8 +11,8 @@ interface Candidate {
 interface CandidateTableProps {
     candidates: Candidate[];
     updateCandidateStatus: (name: string, newStatus: string) => void;
-    deleteCandidate: (name: string) => void; // Adjusted delete function to use name instead of id
-    sendEmail: (name: string) => void;
+    deleteCandidate: (name: string) => void;
+    sendEmail: (candidate: Candidate) => void;
 }
 
 const CandidateTable: React.FC<CandidateTableProps> = ({ candidates, updateCandidateStatus, deleteCandidate, sendEmail }) => {
@@ -24,7 +24,7 @@ const CandidateTable: React.FC<CandidateTableProps> = ({ candidates, updateCandi
         }
     };
 
-    const handleDelete = async (name: string) => { // Using name for deletion
+    const handleDelete = async (name: string) => {
         try {
             deleteCandidate(name);
         } catch (error) {
@@ -32,13 +32,12 @@ const CandidateTable: React.FC<CandidateTableProps> = ({ candidates, updateCandi
         }
     };
 
-    const handleEmail = async (name: string) => {
+    const handleEmail = async (candidate: Candidate) => {
         try {
-            sendEmail(name);
+            sendEmail(candidate);
         } catch (error) {
-            console.error('Error sending email:', error)
+            console.error('Error sending email:', error);
         }
-
     };
 
     const renderCandidatesByStatus = (status: string) => {
@@ -73,7 +72,7 @@ const CandidateTable: React.FC<CandidateTableProps> = ({ candidates, updateCandi
                             </button>
                             <button
                                 className="btn btn-primary"
-                                onClick={() => handleEmail(candidate.name)}
+                                onClick={() => handleEmail(candidate)}
                             >
                                 Send Email
                             </button>

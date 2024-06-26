@@ -3,7 +3,11 @@ import axios from 'axios';
 
 interface EmailPopupProps {
     content: string;
-    onClose: () => void; // Function to handle closing the popup
+    candidate: {
+        name: string;
+        email: string;
+    };
+    onClose: () => void;
 }
 
 interface EmailRequest {
@@ -15,7 +19,7 @@ interface EmailRequest {
     body: string;
 }
 
-const EmailPopup: React.FC<EmailPopupProps> = ({ content, onClose }) => {
+const EmailPopup: React.FC<EmailPopupProps> = ({ content, candidate, onClose }) => {
     const [editableContent, setEditableContent] = useState(content);
     const [emailSubject, setEmailSubject] = useState('');
 
@@ -27,8 +31,7 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ content, onClose }) => {
     }, [content]);
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const newContent = event.target.value;
-        setEditableContent(newContent); // Update the state with textarea value
+        setEditableContent(event.target.value);
     };
 
     const handleCopy = () => {
@@ -40,18 +43,19 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ content, onClose }) => {
     };
 
     const handleSend = async (emailReq: EmailRequest) => {
-        await axios.post('http://localhost:8000/api/send_email/', emailReq)
-            .then(() => {
-                alert('Email sent!');
-            })
-            .catch((error) => console.error('Failed to send email:', error));
+        try {
+            await axios.post('http://localhost:8000/api/send_email/', emailReq);
+            alert('Email sent!');
+        } catch (error) {
+            console.error('Failed to send email:', error);
+        }
     };
 
     const handleSendClick = () => {
         const emailReq: EmailRequest = {
             username: "X",
             passcode: "X",
-            to: 'X', // Replace with actual email
+            to: candidate.email,
             cc: 'X',
             subject: emailSubject,
             body: editableContent,
@@ -71,15 +75,16 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ content, onClose }) => {
                         <textarea
                             value={editableContent}
                             onChange={handleChange}
-                            rows={6} // Adjust rows as needed
-                            cols={50} // Adjust cols as needed
-                            style={{ width: '100%', minHeight: '200px', padding: '10px', fontSize: '16px' }} // Example styles
+                            rows={6}
+                            cols={50}
+                            style={{ width: '100%', minHeight: '200px', padding: '10px', fontSize: '16px' }}
                         />
                     </div>
                     <div className="modal-footer">
+                        <button type="button" className="btn btn-success" onClick={handleSendClick}>Send</button>
                         <button type="button" className="btn btn-primary" onClick={handleCopy}>Copy</button>
                         <button type="button" className="btn btn-secondary" onClick={onClose}>Close</button>
-                        <button type="button" className="btn btn-success" onClick={handleSendClick}>Send</button>
+                        
                     </div>
                 </div>
             </div>
