@@ -1,3 +1,4 @@
+Company Rejection
 Dear {name}, 
 
 We regret to inform you that your application for the {job} position has not been successful.

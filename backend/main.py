@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from model import Candidate
+from model import Candidate, EmailRequest
+from utils import return_email_response
+from utils import send_email
 import os
 from database import (
     fetch_one_candidate,
@@ -68,27 +70,6 @@ async def delete_candidate(name):
     raise HTTPException(404, f"there is no candidate item with given name {name}")
 
 
-# Predefined dictionary to map statuses to template files
-template_files = {
-    "new candidate": "templates/new_candidate.txt",
-    "call": "templates/call.txt",
-    "interview": "templates/interview.txt",
-    "accept": "templates/accept.txt",
-    "reject": "templates/reject.txt",
-}
-
-def return_email_response(response):
-    name = response['name']
-    email = response['email']
-    job = response['job']
-    status = response['status']
-    fp = template_files.get(status)
-    if not fp:
-        raise HTTPException(400, f"Invalid status")
-    with open(fp, "r") as file:
-        return file.read().strip().replace('{name}', name).replace('{email}', email).replace('{job}', job)
-
-
 @app.get("/api/candidate/email/{name}")
 async def get_email_template(name):
     response = await fetch_one_candidate(name)
@@ -96,3 +77,14 @@ async def get_email_template(name):
         return return_email_response(response)
     raise HTTPException(404, f"there is no candidate item with given name {name}")
 
+@app.post("/api/send_email")
+async def send_email_request(email_request: EmailRequest):
+    send_email(
+        username=email_request.username,
+        passcode=email_request.passcode,
+        to=email_request.to,
+        cc=email_request.cc,
+        subject=email_request.subject,
+        body=email_request.body
+    )
+    return {"message": "Email sent successfully"}

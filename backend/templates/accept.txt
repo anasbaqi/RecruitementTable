@@ -1,3 +1,4 @@
+Congratulations
 Dear {name}, 
 
 Congratulations! You have been accepted for the {job} role. Welcome to the team!

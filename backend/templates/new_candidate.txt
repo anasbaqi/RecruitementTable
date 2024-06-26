@@ -1,3 +1,4 @@
+Company application
 Dear {name}, 
 
 Thank you for applying for the {job} position. Your application is under review.

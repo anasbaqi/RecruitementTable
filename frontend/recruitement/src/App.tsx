@@ -70,8 +70,7 @@ function App() {
 
   const sendEmail = async (name: string) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/candidate/email/${name}`);
-      console.log(response.data)
+      const response  = await axios.get(`http://localhost:8000/api/candidate/email/${name}`);
       setEmailContent(response.data)
       //send the response to EmailPopup and then create a popup there
     } catch (error){
@@ -90,8 +89,8 @@ function App() {
       </div>
       <hr />
       <CandidateTable candidates={candidates} updateCandidateStatus={updateCandidateStatus} deleteCandidate={deleteCandidate} sendEmail={sendEmail} />
-      {emailContent && <EmailPopup content={emailContent} onClose={() => setEmailContent(null)} />} {/* Conditionally render EmailPopup */}
-        
+      {emailContent && <EmailPopup content={emailContent} onClose={() => setEmailContent(null)} />} 
+      
     </div>
    
         
